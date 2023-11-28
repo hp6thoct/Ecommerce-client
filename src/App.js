@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home";
+import Login from "./Pages/Login";
+import Checkout from "./Pages/Checkout";
+import Order from "./Pages/Order";
+import Header from "./Components/Header";
+import ProductDetail from "./Pages/ProductDetail";
+import Footer from "./Components/Footer";
+import Category from "./Pages/Category";
+import ProductCategory from "./Pages/ProductCategory";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { UserProvider } from "./Context/UserContext";
+import Profile from "./Pages/Profile";
+import Cart from "./Pages/Cart";
+import 'antd/dist/reset.css';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserProvider>
+      <div>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          {/* <Route path="/order" element={<Order />} />
+          <Route path="/checkout" element={<Checkout />} /> */}
+          <Route path="/product/:productName" element={<ProductDetail />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/category/:categoryId" element={<ProductCategory />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart/:cartid" element={<Cart />} />
+        </Routes>
+        <Footer />
+      </div>
+    </UserProvider>
   );
 }
 
