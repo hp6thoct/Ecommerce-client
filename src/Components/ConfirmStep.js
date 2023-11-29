@@ -9,7 +9,6 @@ const ConfirmStep = ({
   onFinish,
   cart,
   confirmBill,
-  setCurrentStep,
 }) => {
   const cartItems = cart.items.map((item, index) => ({
     quantity: item.product.quantity,
@@ -21,15 +20,15 @@ const ConfirmStep = ({
   const [orderSuccess, setOrderSuccess] = useState(false);
 
   const handleFinish = async () => {
-    const res = confirmBill();
-    setOrderSuccess(res);
+    confirmBill();
+    setOrderSuccess(true);
     onFinish();
   };
 
   if (orderSuccess) {
     return (
       <Result
-        status={orderSuccess ? "success" : "error"}
+        status="success"
         title="Order Placed Successfully!"
         subTitle="Thank you for shopping with us."
         extra={[
@@ -38,9 +37,7 @@ const ConfirmStep = ({
             key="back"
             onClick={() => {
               setOrderSuccess(false);
-              if(orderSuccess){
-                navigate('/')
-              }
+              navigate("/");
             }}
           >
             Go Back
@@ -70,8 +67,8 @@ const ConfirmStep = ({
         </Descriptions.Item>
         <Descriptions.Item label="Total Amount">
           $
-          {paymentData.total_amount
-            ? paymentData.total_amount.toFixed(2)
+          {paymentData.amount
+            ? paymentData.amount.toFixed(2)
             : cart.total.toFixed(2)}
         </Descriptions.Item>
       </Descriptions>

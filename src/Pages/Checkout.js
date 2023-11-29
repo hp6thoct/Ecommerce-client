@@ -70,31 +70,27 @@ const Checkout = () => {
   };
 
   const confirmBill = async ()=>{
-    let resf = true;
     try {
         const data = {
             cart: cart,
             customer: user,
             shipping: shippingData,
             payment: paymentData,
-            total_amount: paymentData.total_amount,
+            total_amount: paymentData.amount,
           };
           const res = await confirmOrder(data);
           if (res.status === 200 && res.data) {
             setShippingData();
             setPaymentData();
             console.log("Order successfully");
-            resf = true
           }
     } catch (error) {
         console.log(error)
-        resf=false
     }
-    return resf;
   }
 
   const handleFinish = async () => {
-    setCurrentStep(currentStep+1)
+    //setCurrentStep(currentStep+1)
   };
 
   const steps = [

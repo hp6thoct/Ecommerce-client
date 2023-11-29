@@ -13,7 +13,7 @@ const Cart = () => {
   const [errorModal, setErrorModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3; // Set the number of items per page
-  let contentModal = "!"
+  let contentModal = "!";
   const navigate = useNavigate();
 
   const handleQuantityChange = async (index, newQuantity) => {
@@ -33,12 +33,12 @@ const Cart = () => {
         res.status
       );
       setErrorModal(true);
-      contentModal = "Update cart item quantity failed! Please try again!"
+      contentModal = "Update cart item quantity failed! Please try again!";
     }
   };
 
-  const handleDelete = async (index)=>{
-    const res = await deleteItem(cart.id,cart.items[index].id);
+  const handleDelete = async (index) => {
+    const res = await deleteItem(cart.id, cart.items[index].id);
     if (res.status === 200 && res.data) {
       // If the API call is successful, update the local cart state
       saveCart(res.data);
@@ -49,9 +49,9 @@ const Cart = () => {
         res.status
       );
       setErrorModal(true);
-      contentModal = "Delete cart item failed! Please try again!"
+      contentModal = "Delete cart item failed! Please try again!";
     }
-  }
+  };
 
   const fetchCart = async () => {
     const res = await getCart(user.id);
@@ -63,9 +63,9 @@ const Cart = () => {
     }
   };
 
-  useEffect(()=>{
-    console.log('console log cart',cart)
-  },[cart])
+  useEffect(() => {
+    console.log("console log cart", cart);
+  }, [cart]);
 
   useEffect(() => {
     fetchCart();
@@ -73,7 +73,12 @@ const Cart = () => {
   }, []);
 
   const handleCheckout = () => {
-    navigate(`/checkout/${user.id}/${cart.id}`)
+    if (cart.totalItem) {
+      navigate(`/checkout/${user.id}/${cart.id}`);
+    } else {
+      setErrorModal(true);
+      contentModal = "Cart is empty! Please go buy something!";
+    }
   };
 
   const handleChangePage = (page) => {
@@ -95,8 +100,8 @@ const Cart = () => {
             <ProductInCart
               product={item.product}
               quantity={item.quantity}
-              onDelete={()=>{
-                handleDelete(index)
+              onDelete={() => {
+                handleDelete(index);
               }}
               onQuantityChange={(newQuantity) =>
                 handleQuantityChange(index, newQuantity)
@@ -126,7 +131,9 @@ const Cart = () => {
 
       <ResultModal
         visible={errorModal}
-        onOk={() => setErrorModal(false)}
+        onOk={() => {
+          navigate("/");
+        }}
         onCancel={() => setErrorModal(false)}
         title="Error Modal"
         content={contentModal}

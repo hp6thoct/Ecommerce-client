@@ -7,10 +7,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { getProduct } from "../Api/ProductController";
 import { useUser } from "../Context/UserContext";
+import { getCart } from "../Api/CartController";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user,  cart } = useUser();
+  const { user,  cart, saveCart } = useUser();
   const [products, setProducts] = useState([]);
   const fetchProducts = async () => {
     try {
@@ -20,9 +21,18 @@ const Home = () => {
       console.log("error fetching products", e);
     }
   };
+  const getUserCart = async (userId) => {
+    try {
+      const res = await getCart(userId);
+      saveCart(res.data);
+    } catch (e) {
+      console.log("error getting cart", e);
+    }
+  };
   useEffect(() => {
     const loadData = async () => {
       await fetchProducts();
+      await getUserCart(user.id);
     };
 
     // Initial load
