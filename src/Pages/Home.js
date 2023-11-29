@@ -2,52 +2,42 @@ import React, { useEffect, useState } from "react";
 import { Container, Carousel } from "react-bootstrap";
 import Product from "../Components/Product";
 import Slider from "react-slick";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { getProduct } from "../Api/ProductController";
 import { useUser } from "../Context/UserContext";
-import { createCart, getCart } from "../Api/CartController";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user, saveCart, cart } = useUser();
-  // Sample product data
+  const { user,  cart } = useUser();
   const [products, setProducts] = useState([]);
+  const fetchProducts = async () => {
+    try {
+      const res = await getProduct();
+      setProducts(res.data);
+    } catch (e) {
+      console.log("error fetching products", e);
+    }
+  };
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchProducts();
+    };
+
+    // Initial load
+    loadData();
+    window.scrollTo(0, 0);
+  }, [user]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await getProduct();
-        console.log(res);
-        setProducts(res.data);
-      } catch (e) {
-        console.log("error fetching products", e);
-      }
-    };
-
-    const iniCart = async () => {
-      try {
-        const res = (await getCart(user.id)).data;
-        console.log("get cart:", res);
-        saveCart(res);
-      } catch (e) {}
-      if (user && !cart) {
-      }
-    };
-    const fetchCart = async () => {
-      if (user) {
-        iniCart();
-      }
-    };
-
-    fetchCart();
-    fetchProducts();
-
-    // This will be called whenever your component re-renders
-    // You can add conditions here to determine when to scroll to the top
     window.scrollTo(0, 0);
   }, []);
+  useEffect(() => {
+    console.log("products: ", products);
+    console.log("user", user);
+    console.log("cart", cart);
+  }, [products, user, cart]);
 
   const featuredSliderSettings = {
     dots: true,

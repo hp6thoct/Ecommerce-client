@@ -1,6 +1,6 @@
 // ProductDetail.js
 import React, { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -34,6 +34,9 @@ const ProductDetail = () => {
   ];
 
   useEffect(() => {
+    console.log("console log cart", cart);
+  }, [cart]);
+  useEffect(() => {
     // This will be called whenever your component re-renders
     // You can add conditions here to determine when to scroll to the top
     window.scrollTo(0, 0);
@@ -44,31 +47,22 @@ const ProductDetail = () => {
     if (!user) {
       setGuestModal(true);
     } else {
-      try {
-        const item = {
-          product: product,
-          quantity: quantity,
-          amount: 0,
-        };
-        console.log(item)
-        const res = await addToCart(cart.id, item);
-        console.log(res)
-        if (res.status === 200 &&res.data.totalItem!==0) {
-          saveCart(res);
-          setSuccessModalVisible(true);
-          setIsSuccess(true);
-        } else {
-          console.log(
-            "Failed to add to cart. Non-200 status code:",
-            res.status
-          );
-          setSuccessModalVisible(true);
-          setIsSuccess(false);
-        }
-      } catch (e) {
+      const item = {
+        product: product,
+        quantity: quantity,
+        amount: 0,
+      };
+      console.log(item);
+      const res = await addToCart(cart.id, item);
+      console.log(res);
+      if (res.status === 200 && res.data.totalItem !== 0) {
+        saveCart(res.data);
+        setSuccessModalVisible(true);
+        setIsSuccess(true);
+      } else {
+        console.log("Failed to add to cart. Non-200 status code:", res.status);
         setSuccessModalVisible(true);
         setIsSuccess(false);
-        console.log("failed to add to cart", e);
       }
     }
   };

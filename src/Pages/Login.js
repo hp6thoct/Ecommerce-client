@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../Api/AccountController";
 import { useUser } from "../Context/UserContext";
 import ResultModal from "../Components/ResultModal";
+import { getCart } from "../Api/CartController";
 
 function Login() {
   const [username, setUsername] = useState("");
-  const { loginUser } = useUser();
+  const { loginUser, saveCart } = useUser();
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [loginFail, setLoginFail] = useState(false)
+  const [loginFail, setLoginFail] = useState(false);
 
   useEffect(() => {
     // This will be called whenever your component re-renders
@@ -19,24 +20,37 @@ function Login() {
     window.scrollTo(0, 0);
   }, []);
 
+  const getUserCart = async (userId) => {
+    try {
+      const res = await getCart(userId);
+      saveCart(res.data);
+    } catch (e) {
+      console.log("error getting cart", e);
+    }
+  };
+
   const handleSignIn = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const userData = (await login(username,password)).data;
-      if(userData.role==='Customer'){
+      const userData = (await login(username, password)).data;
+      if (userData.role === "Customer") {
         loginUser(userData);
-        navigate('/')
-      }else {
+        await getUserCart(userData.id);
+        navigate("/");
+      } else {
         setLoginFail(true);
       }
-    } catch (e){
-      console.log('Login error',e)
+    } catch (e) {
+      console.log("Login error", e);
     }
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      style={{ minHeight: "100vh" }}
+    >
       <div className="login">
         <div className="login__container">
           <h1 className="mb-4">Sign-in</h1>
@@ -85,7 +99,10 @@ function Login() {
             <span className="login__divider-text">New to HB Store?</span>
           </div>
 
-          <Link to="/signup" className="btn btn-success btn-block login__registerButton">
+          <Link
+            to="/signup"
+            className="btn btn-success btn-block login__registerButton"
+          >
             Create your HB Account
           </Link>
         </div>
