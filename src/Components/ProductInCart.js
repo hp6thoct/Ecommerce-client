@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image, Typography, InputNumber, Button } from "antd";
+import { Button, InputNumber, Typography } from "antd";
 import "antd/dist/reset.css"; // Use 'antd/dist/reset.css' for styling
 
 const { Text } = Typography;
@@ -9,82 +9,58 @@ const ProductInCart = ({ product, quantity, onQuantityChange, onDelete }) => {
   const totalPrice = quantity * price;
 
   return (
-    <Card
-      style={{
-        width: "100%",
-        height: "160px",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        {/* Product Image */}
-        <div style={{ width:'70px', marginRight: "16px" }}>
-          <Image
-            src={image}
-            alt={name}
-            style={{ width: '100%', objectFit: "cover" }}
-          />
-        </div>
+    <div className="flex items-center p-4 bg-white shadow-md">
+      {/* Product Image */}
+      <img
+        src={image}
+        alt={name}
+        className="mr-4 w-20 h-25 object-cover"
+        width="80"
+        height="100"
+      />
+
+      <div className="flex flex-col flex-grow">
         {/* Product Name */}
-        
-          <h5
-            style={{
-              whiteSpace: "pre-wrap",
-              wordWrap: "break-word",
-              flexGrow: 1,
-              maxWidth: "30%",
-              textAlign: "center",
-              maxHeight: "100px",
-            }}
-          >
-            {name}
-          </h5>
+        <span className="text-lg font-semibold">{name}</span>
         {/* Product Price */}
-        <Text
-          strong
-          style={{ fontSize: 16, textAlign: "center" }}
-        >
-          ${price}
-        </Text>
+        <Text className="text-sm text-gray-500">${price}</Text>
+      </div>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text strong style={{ margin: 8 }}>
-            Quantity:
-          </Text>
-          <InputNumber min={1} value={quantity} onChange={onQuantityChange} />
+      <div className="flex items-center justify-between flex-grow">
+        {/* Quantity */}
+        <label htmlFor="quantity" className="mr-2">
+          Quantity:
+        </label>
+        <div className="flex items-center">
+          <Button
+            className="px-2 py-1 bg-gray-200 rounded-l-lg"
+            onClick={() => onQuantityChange(quantity - 1)}
+          >
+            -
+          </Button>
+          <span className="px-2 py-1 border-t-2 border-b-2 border-gray-300">{quantity}</span>
+          <Button
+            className="px-2 py-1 bg-gray-200 rounded-r-lg"
+            onClick={() => onQuantityChange(quantity + 1)}
+          >
+            +
+          </Button>
         </div>
+      </div>
 
+      <div className="flex flex-col items-end flex-grow">
         {/* Total Price */}
-        <Text
-          strong
-          style={{ fontSize: 16, textAlign: "center" }}
-        >
-          Total: ${totalPrice.toFixed(2)}
-        </Text>
-
+        <Text className="text-lg font-semibold">Total: ${totalPrice.toFixed(2)}</Text>
         {/* Delete Button */}
-        <Button type="danger" onClick={onDelete}>
+        <Button
+          type="danger"
+          onClick={onDelete}
+          className="text-red-500 hover:text-red-600"
+        >
           Delete
         </Button>
       </div>
-    </Card>
+    </div>
   );
 };
 

@@ -32,7 +32,9 @@ const Home = () => {
   useEffect(() => {
     const loadData = async () => {
       await fetchProducts();
-      await getUserCart(user.id);
+      if(user){
+        await getUserCart(user.id);
+      }
     };
 
     // Initial load

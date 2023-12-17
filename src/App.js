@@ -14,6 +14,9 @@ import { UserProvider } from "./Context/UserContext";
 import Profile from "./Pages/Profile";
 import Cart from "./Pages/Cart";
 import 'antd/dist/reset.css';
+import Result from "./Pages/Result";
+import OrderDetail from "./Pages/OrderDetail";
+
 
 
 function App() {
@@ -24,15 +27,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/order" element={<Order />} />*/}
+          <Route path="/order" element={<Order />} />
           <Route path="/checkout/:userid/:cartid" element={<Checkout />} /> 
           <Route path="/product/:productName" element={<ProductDetail />} />
           <Route path="/category" element={<Category />} />
           <Route path="/category/:categoryId" element={<ProductCategory />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart/:cartid" element={<Cart />} />
+          <Route path="/search/:keyword" element={<Result />} />
+          <Route path="/order/:orderId" element={<OrderDetail />} />
         </Routes>
-        <Footer />
+       
       </div>
     </UserProvider>
   );
